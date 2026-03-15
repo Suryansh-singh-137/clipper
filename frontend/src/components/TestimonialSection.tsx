@@ -25,7 +25,7 @@ const testimonials = [
 
 const TestimonialsSection = () => {
   return (
-    <section id="testimonials" className="py-28 bg-white">
+    <section id="testimonials" className="py-28">
       <div className="container mx-auto px-6">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -49,7 +49,7 @@ const TestimonialsSection = () => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: i * 0.1 }}
-              className="bg-[var(--background)] rounded-2xl p-6 shadow-sm border border-[var(--border)] hover:shadow-md transition-shadow"
+              className="rounded-2xl p-6 shadow-sm border border-[var(--border)] hover:shadow-md transition-shadow"
             >
               <div className="flex gap-1 mb-4">
                 {[...Array(5)].map((_, j) => (

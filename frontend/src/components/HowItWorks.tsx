@@ -42,7 +42,7 @@ const HowItWorks = () => {
     <section
       id="how-it-works"
       ref={ref}
-      className="py-28 bg-[var(--background)] relative overflow-hidden"
+      className="py-28 relative overflow-hidden"
     >
       <motion.div
         style={{ y }}
@@ -76,7 +76,7 @@ const HowItWorks = () => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: i * 0.1 }}
-              className="relative bg-white rounded-2xl p-6 shadow-sm border border-[var(--border)] hover:shadow-md transition-all group"
+              className="relative rounded-2xl p-6 shadow-sm border border-[var(--border)] hover:shadow-md transition-all group"
             >
               <div className="absolute top-4 right-4 text-xs font-bold text-[var(--muted)]/30">
                 0{i + 1}

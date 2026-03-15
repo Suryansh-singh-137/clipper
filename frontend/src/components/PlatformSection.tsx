@@ -13,7 +13,7 @@ const platforms = [
 
 const PlatformsSection = () => {
   return (
-    <section id="platforms" className="py-24 bg-[var(--background)]">
+    <section id="platforms" className="py-24">
       <div className="container mx-auto px-6">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -41,7 +41,7 @@ const PlatformsSection = () => {
               whileInView={{ opacity: 1, scale: 1 }}
               viewport={{ once: true }}
               transition={{ delay: i * 0.05 }}
-              className="bg-white rounded-2xl p-6 shadow-sm border border-[var(--border)] hover:shadow-md transition-all text-center group cursor-default"
+              className="rounded-2xl p-6 shadow-sm border border-[var(--border)] hover:shadow-md transition-all text-center group cursor-default"
             >
               <p.icon className="w-8 h-8 mx-auto mb-3 text-[var(--muted)] group-hover:text-[var(--accent)] transition-colors" />
               <p className="text-sm font-medium text-[var(--foreground)]">

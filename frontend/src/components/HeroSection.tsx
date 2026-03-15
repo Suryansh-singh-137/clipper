@@ -16,10 +16,7 @@ const HeroSection = () => {
   const opacity = useTransform(scrollYProgress, [0, 0.8], [1, 0]);
 
   return (
-    <section
-      ref={ref}
-      className="relative pt-12 pb-24 overflow-hidden bg-[var(--background)]"
-    >
+    <section ref={ref} className="relative pt-12 pb-24 overflow-hidden">
       {/* Decorative blobs */}
       <div className="absolute top-32 left-[10%] w-72 h-72 rounded-full bg-[var(--accent)]/10 blur-3xl" />
       <div className="absolute bottom-10 right-[15%] w-96 h-96 rounded-full bg-[var(--accent)]/5 blur-3xl" />

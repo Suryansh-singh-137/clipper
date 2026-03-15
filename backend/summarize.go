@@ -13,7 +13,7 @@ func summarize(transcript string) (string, error) {
 	fmt.Println("summarize called with:", transcript)
 
 	payload, _ := json.Marshal(map[string]interface{}{
-		"model": "mistralai/mistral-7b-instruct:free",
+	"model": "deepseek/deepseek-r1-distill-qwen-1.5b:free",
 		"messages": []map[string]string{
 			{"role": "user", "content": "Summarize this in 3 bullet points: " + transcript},
 		},

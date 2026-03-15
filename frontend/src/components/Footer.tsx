@@ -1,6 +1,7 @@
 "use client";
 import { ArrowRight, Scissors } from "lucide-react";
 import { motion } from "framer-motion";
+import Link from "next/link";
 
 const Footer = () => {
   return (
@@ -19,12 +20,12 @@ const Footer = () => {
             Join thousands of creators, researchers, and teams using Clipy every
             day.
           </p>
-          <a
-            href="#"
+          <Link
+            href="/tool"
             className="inline-flex items-center gap-2 bg-[var(--background)] text-[var(--accent)] hover:bg-white px-8 py-3 rounded-xl font-semibold text-base transition-colors"
           >
             Try Clipy Free <ArrowRight className="w-4 h-4" />
-          </a>
+          </Link>
         </motion.div>
       </div>
 

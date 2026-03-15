@@ -2,6 +2,7 @@
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Menu, X, Scissors } from "lucide-react";
+import Link from "next/link";
 
 const navLinks = [
   { label: "Features", href: "#features" },
@@ -53,12 +54,12 @@ const Navbar = () => {
           ))}
         </div>
 
-        <a
-          href="#"
+        <Link
+          href="/tool"
           className="hidden md:inline-flex bg-[var(--accent)] hover:bg-[var(--accent-hover)] text-white text-sm font-semibold px-5 py-2 rounded-xl transition-colors"
         >
           Try Clipy Free
-        </a>
+        </Link>
 
         <button
           className="md:hidden text-[var(--foreground)]"
@@ -85,12 +86,12 @@ const Navbar = () => {
                 {link.label}
               </a>
             ))}
-            <a
-              href="#"
+            <Link
+              href="/tool"
               className="bg-[var(--accent)] text-white text-sm font-semibold px-5 py-2 rounded-xl w-fit mt-2"
             >
               Try Clipy Free
-            </a>
+            </Link>
           </div>
         </motion.div>
       )}

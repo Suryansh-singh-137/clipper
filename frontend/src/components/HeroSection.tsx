@@ -3,6 +3,7 @@ import { motion, useScroll, useTransform } from "framer-motion";
 import { useRef } from "react";
 import { ArrowRight, Play } from "lucide-react";
 import Image from "next/image";
+import Link from "next/link";
 
 const HeroSection = () => {
   const ref = useRef<HTMLDivElement>(null);
@@ -71,9 +72,12 @@ const HeroSection = () => {
               placeholder="Paste a video URL..."
               className="flex-1 w-full px-5 py-3.5 rounded-xl border border-[var(--border)] bg-white text-[var(--foreground)] placeholder:text-[var(--muted)] focus:outline-none focus:ring-2 focus:ring-[var(--accent)]/30 transition-all text-sm shadow-sm font-mono"
             />
-            <button className="bg-[var(--accent)] hover:bg-[var(--accent-hover)] text-white px-6 py-3.5 rounded-xl font-semibold whitespace-nowrap transition-colors flex items-center gap-1.5 text-sm">
+            <Link
+              href="/tool"
+              className="bg-[var(--accent)] hover:bg-[var(--accent-hover)] text-white px-6 py-3.5 rounded-xl font-semibold whitespace-nowrap transition-colors flex items-center gap-1.5 text-sm"
+            >
               Clip it <ArrowRight className="w-4 h-4" />
-            </button>
+            </Link>
           </motion.div>
 
           <motion.p

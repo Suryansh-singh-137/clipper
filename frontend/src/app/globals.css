@@ -1,0 +1,32 @@
+@import "tailwindcss";
+
+:root {
+  --background: #f7f7ff;
+  --foreground: #27187e;
+  --accent: #27187e;
+  --accent-hover: #1a1060;
+  --card: #ffffff;
+  --border: #d8d8f0;
+  --muted: #8888bb;
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-raleway), sans-serif;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: var(--font-playfair), serif;
+}
+
+code,
+pre,
+.mono {
+  font-family: var(--font-raleway), sans-serif;
+}

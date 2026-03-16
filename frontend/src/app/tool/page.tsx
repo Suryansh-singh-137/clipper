@@ -70,9 +70,8 @@ export default function ToolPage() {
       i++;
       if (i < STEPS.length - 1) setstep(STEPS[i]);
     }, 8000);
-
     try {
-      const response = await fetch("http://localhost:8000/clip", {
+      const response = await fetch("https://clipper-production-0d3d.up.railway.app/clip", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ tweetUrl: url, start, end, outputs: output }),

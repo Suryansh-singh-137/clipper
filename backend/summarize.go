@@ -12,38 +12,62 @@ import (
 func summarize(transcript string) (string, error) {
 	fmt.Println("summarize called with:", transcript)
 
-	payload, _ := json.Marshal(map[string]interface{}{
-	"model": "deepseek/deepseek-r1-distill-qwen-1.5b:free",
+	payload, err := json.Marshal(map[string]interface{}{
+		"model": "llama3-8b-8192",
 		"messages": []map[string]string{
-			{"role": "user", "content": "Summarize this in 3 bullet points: " + transcript},
+			{
+				"role": "user",
+				"content": "Summarize this video properly with details and bullet points:\n" + transcript,
+			},
 		},
 	})
-	req ,_:= http.NewRequest("POST","https://openrouter.ai/api/v1/chat/completions",bytes.NewReader(payload))
-req.Header.Set("Authorization", "Bearer " + os.Getenv("OPENROUTER_KEY"))
-req.Header.Set("Content-Type","application/json")
-client:= http.Client{}
-res ,_:= client.Do(req)
+	if err != nil {
+		return "", err
+	}
 
-    respBody, err := io.ReadAll(res.Body)
-		fmt.Println("summarize response:", string(respBody))
-    if err != nil {
-        return "", fmt.Errorf("failed to read response: %v", err)
-    }
-		 var result struct {
-        Choices []struct {
-            Message struct {
-                Content string `json:"content"`
-            } `json:"message"`
-        } `json:"choices"`
-    }
-    json.Unmarshal(respBody, &result)
-		json.Unmarshal(respBody, &result)
+	req, err := http.NewRequest(
+		"POST",
+		"https://api.groq.com/openai/v1/chat/completions",
+		bytes.NewReader(payload),
+	)
+	if err != nil {
+		return "", err
+	}
 
-// ✅ add this check
-if len(result.Choices) == 0 {
-    return "", fmt.Errorf("no response from OpenRouter: %s", string(respBody))
-}
+	req.Header.Set("Authorization", "Bearer "+os.Getenv("GROQ_API_KEY"))
+	req.Header.Set("Content-Type", "application/json")
 
-return result.Choices[0].Message.Content, nil
-    return result.Choices[0].Message.Content, nil
+	client := http.Client{}
+	res, err := client.Do(req)
+	if err != nil {
+		return "", err
+	}
+	defer res.Body.Close()
+
+	respBody, err := io.ReadAll(res.Body)
+	if err != nil {
+		return "", fmt.Errorf("failed to read response: %v", err)
+	}
+
+	fmt.Println("summarize response:", string(respBody))
+
+	var result struct {
+		Choices []struct {
+			Message struct {
+				Content string `json:"content"`
+			} `json:"message"`
+		} `json:"choices"`
+	}
+
+	err = json.Unmarshal(respBody, &result)
+	if err != nil {
+		return "", err
+	}
+
+	// ✅ important check
+	if len(result.Choices) == 0 {
+		return "", fmt.Errorf("no response from GROQ: %s", string(respBody))
+	}
+
+	return result.Choices[0].Message.Content, nil
 }

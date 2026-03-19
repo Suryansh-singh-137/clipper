@@ -82,7 +82,7 @@ func clip(w http.ResponseWriter, r *http.Request) {
 	response := map[string]string{}
 
 	if contains(body.Outputs, "mp4") {
-		response["mp4Url"] = fmt.Sprintf("http://localhost:%s/%s", port, clippedFile)
+		response["mp4Url"] = fmt.Sprintf("https://clipper-production-0d3d.up.railway.app/%s", clippedFile)
 	}
 
 	if contains(body.Outputs, "mp3") {
@@ -91,7 +91,7 @@ func clip(w http.ResponseWriter, r *http.Request) {
 			sendError(w, "Failed to extract audio from video.", 500)
 			return
 		}
-		response["mp3Url"] = fmt.Sprintf("http://localhost:%s/%s", port, audioFile)
+		response["mp3Url"] = fmt.Sprintf("https://clipper-production-0d3d.up.railway.app/%s",  audioFile)
 	}
 
 	needsAudio := contains(body.Outputs, "transcript") || contains(body.Outputs, "summary")

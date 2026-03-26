@@ -13,7 +13,7 @@ func summarize(transcript string) (string, error) {
 	fmt.Println("summarize called with:", transcript)
 
 	payload, err := json.Marshal(map[string]interface{}{
-		"model": "llama3-8b-8192",
+		"model": "llama-3.3-70b-versatile",
 		"messages": []map[string]string{
 			{
 				"role": "user",
@@ -64,7 +64,6 @@ func summarize(transcript string) (string, error) {
 		return "", err
 	}
 
-	// ✅ important check
 	if len(result.Choices) == 0 {
 		return "", fmt.Errorf("no response from GROQ: %s", string(respBody))
 	}

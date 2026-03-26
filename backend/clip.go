@@ -34,6 +34,11 @@ func sendError(w http.ResponseWriter, message string, code int) {
 }
 
 func clip(w http.ResponseWriter, r *http.Request) {
+	 ytdlpPath, _ := exec.Command("which", "yt-dlp").CombinedOutput()
+    ffmpegPath, _ := exec.Command("which", "ffmpeg").CombinedOutput()
+    fmt.Println("yt-dlp location:", string(ytdlpPath))
+    fmt.Println("ffmpeg location:", string(ffmpegPath))
+    
 	if r.Method != "POST" {
 		sendError(w, "Only POST allowed", http.StatusMethodNotAllowed)
 		return
@@ -58,11 +63,14 @@ func clip(w http.ResponseWriter, r *http.Request) {
 	clippedFile := fmt.Sprintf("download/clipped_%d.mp4", id)
 	audioFile := fmt.Sprintf("download/clipped_%d.mp3", id)
 
-	_, err = exec.Command("yt-dlp", "-f", "bestvideo+bestaudio/best", "--merge-output-format", "mp4", "-o", videoFile, body.TweetURL).CombinedOutput()
-	if err != nil {
-		sendError(w, "Could not download video. Make sure the URL is valid and contains a video.", 500)
-		return
-	}
+out, err := exec.Command("yt-dlp", "-f", "bestvideo+bestaudio/best", "--merge-output-format", "mp4", "-o", videoFile, body.TweetURL).CombinedOutput()
+if err != nil {
+    fmt.Println("yt-dlp error:", err)
+    fmt.Println("yt-dlp output:", string(out))
+    sendError(w, "Could not download video. Make sure the URL is valid and contains a video.", 500)
+    return
+}
+fmt.Println("yt-dlp success:", string(out))
 
 	var ffmpegErr error
 	if body.Start == "" && body.End == "" {

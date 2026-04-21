@@ -61,7 +61,7 @@ export default function ToolPage() {
   const [progress, setprogress] = useState(0);
   const [timeLeft, settimeLeft] = useState(0);
   const progressRef = useRef<NodeJS.Timeout | null>(null);
-
+  const [copied, setCopied] = useState(false);
   // clean up timer on unmount
   useEffect(() => {
     return () => {
@@ -73,6 +73,11 @@ export default function ToolPage() {
     setoutput((prev) =>
       prev.includes(id) ? prev.filter((o) => o !== id) : [...prev, id],
     );
+  }
+  function copyTranscript() {
+    navigator.clipboard.writeText(result.transcript);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000); // reset after 2 seconds
   }
 
   function startProgressBar(totalSeconds: number) {
@@ -383,9 +388,21 @@ export default function ToolPage() {
                       <span className="text-sm font-medium text-[var(--foreground)]">
                         📝 Transcript
                       </span>
-                      <span className="text-xs text-[var(--foreground)]/40">
-                        {showTranscript ? "Hide" : "Show"}
-                      </span>
+                      <div className="flex items-center gap-2">
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            copyTranscript();
+                          }}
+                          className="text-xs text-[var(--accent)] hover:underline"
+                        >
+                          {copied ? "✅ Copied!" : "Copy"}
+                        </button>
+
+                        <span className="text-xs text-[var(--foreground)]/40">
+                          {showTranscript ? "Hide" : "Show"}
+                        </span>
+                      </div>
                     </button>
                     {showTranscript && (
                       <div className="px-4 pb-4 text-sm text-[var(--foreground)]/70 leading-relaxed border-t border-[var(--border)] pt-3">

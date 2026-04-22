@@ -90,8 +90,7 @@ fmt.Println("yt-dlp success:", string(out))
 	response := map[string]string{}
 
 	if contains(body.Outputs, "mp4") {
-		response["mp4Url"] = fmt.Sprintf("https://clipper-q2jf.onrender.com/clip/%s", clippedFile)
-	}
+		response["mp4Url"] =  fmt.Sprintf("https://clipper-q2jf.onrender.com/download/%s", clippedFile)
 
 	if contains(body.Outputs, "mp3") {
 		_, err = exec.Command("ffmpeg", "-i", clippedFile, "-q:a", "0", "-map", "a", audioFile).CombinedOutput()
@@ -99,7 +98,7 @@ fmt.Println("yt-dlp success:", string(out))
 			sendError(w, "Failed to extract audio from video.", 500)
 			return
 		}
-		response["mp3Url"] = fmt.Sprintf("https://clipper-q2jf.onrender.com/clip/%s",  audioFile)
+		response["mp3Url"] = fmt.Sprintf("https://clipper-q2jf.onrender.com/download/%s", audioFile)
 	}
 
 	needsAudio := contains(body.Outputs, "transcript") || contains(body.Outputs, "summary")

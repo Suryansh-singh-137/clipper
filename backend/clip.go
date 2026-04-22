@@ -1,3 +1,38 @@
+package main
+
+import (
+	"encoding/json"
+	"fmt"
+	"net/http"
+	"os"
+	"os/exec"
+	"time"
+)
+
+type RequestBody struct {
+	TweetURL string   `json:"tweetUrl"`
+	Start    string   `json:"start"`
+	End      string   `json:"end"`
+	Outputs  []string `json:"outputs"`
+}
+
+func contains(slice []string, item string) bool {
+	for _, v := range slice {
+		if v == item {
+			return true
+		}
+	}
+	return false
+}
+
+func sendError(w http.ResponseWriter, message string, code int) {
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(code)
+	json.NewEncoder(w).Encode(map[string]string{
+		"error": message,
+	})
+}
+
 func clip(w http.ResponseWriter, r *http.Request) {
 	ytdlpPath, _ := exec.Command("which", "yt-dlp").CombinedOutput()
 	ffmpegPath, _ := exec.Command("which", "ffmpeg").CombinedOutput()

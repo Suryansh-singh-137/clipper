@@ -1,44 +1,9 @@
-package main
-
-import (
-	"encoding/json"
-	"fmt"
-	"net/http"
-	"os"
-	"os/exec"
-	"time"
-)
-
-type RequestBody struct {
-	TweetURL string   `json:"tweetUrl"`
-	Start    string   `json:"start"`
-	End      string   `json:"end"`
-	Outputs  []string `json:"outputs"`
-}
-
-func contains(slice []string, item string) bool {
-	for _, v := range slice {
-		if v == item {
-			return true
-		}
-	}
-	return false
-}
-
-func sendError(w http.ResponseWriter, message string, code int) {
-	w.Header().Set("Content-Type", "application/json")
-	w.WriteHeader(code)
-	json.NewEncoder(w).Encode(map[string]string{
-		"error": message,
-	})
-}
-
 func clip(w http.ResponseWriter, r *http.Request) {
-	 ytdlpPath, _ := exec.Command("which", "yt-dlp").CombinedOutput()
-    ffmpegPath, _ := exec.Command("which", "ffmpeg").CombinedOutput()
-    fmt.Println("yt-dlp location:", string(ytdlpPath))
-    fmt.Println("ffmpeg location:", string(ffmpegPath))
-    
+	ytdlpPath, _ := exec.Command("which", "yt-dlp").CombinedOutput()
+	ffmpegPath, _ := exec.Command("which", "ffmpeg").CombinedOutput()
+	fmt.Println("yt-dlp location:", string(ytdlpPath))
+	fmt.Println("ffmpeg location:", string(ffmpegPath))
+
 	if r.Method != "POST" {
 		sendError(w, "Only POST allowed", http.StatusMethodNotAllowed)
 		return
@@ -59,18 +24,23 @@ func clip(w http.ResponseWriter, r *http.Request) {
 	os.MkdirAll("download", os.ModePerm)
 
 	id := time.Now().Unix()
+
 	videoFile := fmt.Sprintf("download/%d.mp4", id)
 	clippedFile := fmt.Sprintf("download/clipped_%d.mp4", id)
 	audioFile := fmt.Sprintf("download/clipped_%d.mp3", id)
 
-out, err := exec.Command("yt-dlp", "-f", "bestvideo+bestaudio/best", "--merge-output-format", "mp4", "-o", videoFile, body.TweetURL).CombinedOutput()
-if err != nil {
-    fmt.Println("yt-dlp error:", err)
-    fmt.Println("yt-dlp output:", string(out))
-    sendError(w, "Could not download video. Make sure the URL is valid and contains a video.", 500)
-    return
-}
-fmt.Println("yt-dlp success:", string(out))
+	// filenames only (FIX)
+	clippedFileName := fmt.Sprintf("clipped_%d.mp4", id)
+	audioFileName := fmt.Sprintf("clipped_%d.mp3", id)
+
+	out, err := exec.Command("yt-dlp", "-f", "bestvideo+bestaudio/best", "--merge-output-format", "mp4", "-o", videoFile, body.TweetURL).CombinedOutput()
+	if err != nil {
+		fmt.Println("yt-dlp error:", err)
+		fmt.Println("yt-dlp output:", string(out))
+		sendError(w, "Could not download video. Make sure the URL is valid and contains a video.", 500)
+		return
+	}
+	fmt.Println("yt-dlp success:", string(out))
 
 	var ffmpegErr error
 	if body.Start == "" && body.End == "" {
@@ -89,16 +59,25 @@ fmt.Println("yt-dlp success:", string(out))
 
 	response := map[string]string{}
 
+	// ✅ FIXED: separate block
 	if contains(body.Outputs, "mp4") {
-		response["mp4Url"] =  fmt.Sprintf("https://clipper-q2jf.onrender.com/download/%s", clippedFile)
+		response["mp4Url"] = fmt.Sprintf(
+			"https://clipper-q2jf.onrender.com/download/%s",
+			clippedFileName,
+		)
+	}
 
+	// ✅ FIXED: no longer nested
 	if contains(body.Outputs, "mp3") {
 		_, err = exec.Command("ffmpeg", "-i", clippedFile, "-q:a", "0", "-map", "a", audioFile).CombinedOutput()
 		if err != nil {
 			sendError(w, "Failed to extract audio from video.", 500)
 			return
 		}
-		response["mp3Url"] = fmt.Sprintf("https://clipper-q2jf.onrender.com/download/%s", audioFile)
+		response["mp3Url"] = fmt.Sprintf(
+			"https://clipper-q2jf.onrender.com/download/%s",
+			audioFileName,
+		)
 	}
 
 	needsAudio := contains(body.Outputs, "transcript") || contains(body.Outputs, "summary")

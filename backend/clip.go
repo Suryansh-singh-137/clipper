@@ -68,7 +68,7 @@ func clip(w http.ResponseWriter, r *http.Request) {
 	clippedFileName := fmt.Sprintf("clipped_%d.mp4", id)
 	audioFileName := fmt.Sprintf("clipped_%d.mp3", id)
 
-	out, err := exec.Command("yt-dlp", "-f", "bestvideo+bestaudio/best", "--merge-output-format", "mp4", "-o", videoFile, body.TweetURL).CombinedOutput()
+	out, err := exec.Command("yt-dlp", "--js-runtimes", "nodejs", "-f", "bestvideo+bestaudio/best", "--merge-output-format", "mp4", "-o", videoFile, body.TweetURL).CombinedOutput()
 	if err != nil {
 		fmt.Println("yt-dlp error:", err)
 		fmt.Println("yt-dlp output:", string(out))

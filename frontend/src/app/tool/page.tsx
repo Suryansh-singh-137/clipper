@@ -35,6 +35,22 @@ const STEPS = [
   "✅ Done!",
 ];
 
+function formatTimeInput(input: string): string {
+  // Remove all non-digit characters except colons
+  let cleaned = input.replace(/[^0-9:]/g, "");
+
+  // If it only has colons, remove them for processing
+  const onlyDigits = cleaned.replace(/:/g, "");
+
+  if (!onlyDigits) return "";
+
+  // Pad with leading zeros to 6 digits (HHMMSS)
+  const padded = onlyDigits.padStart(6, "0").slice(-6);
+
+  // Format as HH:MM:SS
+  return `${padded.slice(0, 2)}:${padded.slice(2, 4)}:${padded.slice(4, 6)}`;
+}
+
 function estimateTime(outputs: string[]): number {
   let time = 15;
   if (outputs.includes("mp3")) time += 5;
@@ -220,7 +236,7 @@ export default function ToolPage() {
               </label>
               <input
                 type="text"
-                placeholder="https://youtube.com/watch?v=..."
+                placeholder="https://reddit.com/r/..."
                 value={url}
                 onChange={(e) => seturl(e.target.value)}
                 className="w-full px-4 py-3 rounded-xl border border-[var(--border)] bg-white text-[var(--foreground)] placeholder:text-[var(--foreground)]/30 focus:outline-none focus:ring-2 focus:ring-[var(--accent)]/30 text-sm font-mono"
@@ -240,9 +256,10 @@ export default function ToolPage() {
                     type="text"
                     placeholder={ph as string}
                     value={val as string}
-                    onChange={(e) =>
-                      (setter as (v: string) => void)(e.target.value)
-                    }
+                    onChange={(e) => {
+                      const formatted = formatTimeInput(e.target.value);
+                      (setter as (v: string) => void)(formatted);
+                    }}
                     className="w-full px-4 py-3 rounded-xl border border-[var(--border)] bg-white text-[var(--foreground)] placeholder:text-[var(--foreground)]/30 focus:outline-none focus:ring-2 focus:ring-[var(--accent)]/30 text-sm font-mono"
                   />
                 </div>

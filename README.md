@@ -2,7 +2,7 @@
 
 > Clip any video from the web, extract audio, transcribe in 50+ languages, and get AI-powered summaries — all in one tool.
 
-**Live Demo:** [clipper-mauve.vercel.app](https://clipper-mauve.vercel.app)
+**Live Link:** [clipper-mauve.vercel.app](https://clipper-mauve.vercel.app)
 
 ---
 ## 🎥 Demo Video

@@ -5,6 +5,11 @@
 **Live Demo:** [clipper-mauve.vercel.app](https://clipper-mauve.vercel.app)
 
 ---
+## 🎥 Demo Video
+
+https://github.com/user-attachments/assets/e0c18cfc-f617-4b65-802a-1512da368ce2
+
+
 
 ## ✨ Features
 
